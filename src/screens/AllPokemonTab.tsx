@@ -17,7 +17,6 @@ export default function AllPokemonTab() {
 
   const backgroundColor = isDark ? "#121212" : "#fafafa";
 
-  // Filter pokemon sesuai search
   const filteredPokemons = pokemons.filter(p =>
     p.name.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -49,7 +48,6 @@ export default function AllPokemonTab() {
 
   return (
     <View style={{ flex: 1, backgroundColor, padding: 14 }}>
-      {/* SEARCH BAR */}
       <TextInput
         placeholder="Cari Pokémon..."
         placeholderTextColor={isDark ? "#aaa" : "#555"}

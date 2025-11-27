@@ -32,8 +32,7 @@ export const PokemonService = {
     return data.moves; 
   },
 
-  /** —————— MASTER REQUEST FEATURE —————— **/
-  /** FULL detail combine 3 request */
+
   getMoreData: async (name: string) => {
     const detail = await PokemonService.getPokemonDetail(name);
     const species = await PokemonService.getPokemonSpecies(name);

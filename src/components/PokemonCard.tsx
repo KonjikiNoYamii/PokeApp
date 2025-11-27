@@ -49,7 +49,7 @@ export default function PokemonCard({ name, url, onPress, isDark, small, style }
         small && styles.cardSmall,
         { backgroundColor: cardBg },
         pressed && { transform: [{ scale: 0.97 }], opacity: 0.85 },
-        style, // override style tambahan
+        style,
       ]}
       onPress={onPress}
     >

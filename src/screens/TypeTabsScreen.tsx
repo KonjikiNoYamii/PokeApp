@@ -20,9 +20,7 @@ export default function TypeTabScreen() {
   const [searchText, setSearchText] = useState("");
 
   const backgroundColor = isDark ? "#121212" : "#fafafa";
-  const textColor = isDark ? "#eee" : "#222";
 
-  // Filter Pokémon sesuai search
   const filteredPokemons = pokemons.filter(p =>
     p.name.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -62,7 +60,6 @@ export default function TypeTabScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor, padding: 14 }}>
-      {/* SEARCH BAR */}
       <TextInput
         placeholder="Cari Pokémon..."
         placeholderTextColor={isDark ? "#aaa" : "#555"}

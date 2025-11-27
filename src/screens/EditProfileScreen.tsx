@@ -9,34 +9,35 @@ import {
   Image,
 } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { launchImageLibrary, Asset } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { requestGalleryPermission } from '../services/requestGalleryPermission';
+import { useTheme } from '../context/ThemeContext';
 
 export default function EditProfileScreen({ navigation }: any) {
   const { user, avatar, updateAvatar, updateUsername } = useAuth();
+  const { isDark } = useTheme();
   const [newUsername, setNewUsername] = useState(user || '');
   const [newAvatar, setNewAvatar] = useState<string | null>(avatar);
 
-const handlePickImage = async () => {
-  // Minta izin dulu (Android)
-  const hasPermission = await requestGalleryPermission();
-  if (!hasPermission) {
-    Alert.alert('Izin Ditolak', 'Tidak bisa membuka galeri tanpa izin!');
-    return;
-  }
+  const handlePickImage = async () => {
+    const hasPermission = await requestGalleryPermission();
+    if (!hasPermission) {
+      Alert.alert('Izin Ditolak', 'Tidak bisa membuka galeri tanpa izin!');
+      return;
+    }
 
-  const options : any = { mediaType: 'photo', selectionLimit: 1, quality: 0.8 };
-  const result = await launchImageLibrary(options);
+    const options: any = { mediaType: 'photo', selectionLimit: 1, quality: 0.8 };
+    const result = await launchImageLibrary(options);
 
-  if (result.didCancel) return;
-  if (result.errorCode) {
-    Alert.alert('Error', result.errorMessage || 'Gagal memilih foto');
-    return;
-  }
-  if (result.assets && result.assets.length > 0) {
-    setNewAvatar(result.assets[0].uri || null);
-  }
-};
+    if (result.didCancel) return;
+    if (result.errorCode) {
+      Alert.alert('Error', result.errorMessage || 'Gagal memilih foto');
+      return;
+    }
+    if (result.assets && result.assets.length > 0) {
+      setNewAvatar(result.assets[0].uri || null);
+    }
+  };
 
   const handleSave = async () => {
     if (!newUsername.trim()) {
@@ -55,8 +56,15 @@ const handlePickImage = async () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: isDark ? '#121212' : '#fff' },
+      ]}
+    >
+      <Text style={[styles.title, { color: isDark ? '#fff' : '#000' }]}>
+        Edit Profile
+      </Text>
 
       <Pressable onPress={handlePickImage} style={styles.avatarWrapper}>
         <Image
@@ -69,12 +77,22 @@ const handlePickImage = async () => {
           }
           style={styles.avatar}
         />
-        <Text style={styles.changePhoto}>Ganti Foto</Text>
+        <Text style={[styles.changePhoto, { color: '#007bff' }]}>
+          Ganti Foto
+        </Text>
       </Pressable>
 
       <TextInput
         placeholder="Username"
-        style={styles.input}
+        placeholderTextColor={isDark ? '#aaa' : '#555'}
+        style={[
+          styles.input,
+          {
+            backgroundColor: isDark ? '#2a2a2a' : '#fff',
+            color: isDark ? '#fff' : '#000',
+            borderColor: isDark ? '#555' : '#ccc',
+          },
+        ]}
         value={newUsername}
         onChangeText={setNewUsername}
       />
@@ -97,7 +115,7 @@ const handlePickImage = async () => {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff', gap: 20 },
+  container: { flex: 1, padding: 20, gap: 20 },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
@@ -111,13 +129,11 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     backgroundColor: '#ccc',
   },
-  changePhoto: { textAlign: 'center', color: '#007bff', marginTop: 5 },
+  changePhoto: { textAlign: 'center', marginTop: 5 },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
     padding: 10,
     borderRadius: 5,
-    backgroundColor: '#fff',
   },
   button: { padding: 15, borderRadius: 8, alignItems: 'center', marginTop: 10 },
   buttonText: { color: '#fff', fontWeight: 'bold' },
