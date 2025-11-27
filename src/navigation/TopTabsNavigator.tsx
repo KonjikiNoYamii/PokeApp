@@ -25,13 +25,14 @@ export default function TopTabsScreen() {
           backgroundColor: '#ff3d3d',
           height: 3,
           borderRadius: 20,
-          width: 125,               // kecil tapi tetap jelas
-          marginLeft: 12,          // supaya lebih center per tab otomatis
+          width: 125,             
+          marginLeft: 12,        
         },
-
+ 
+        
         tabBarLabelStyle: {
           fontWeight: '600',
-          fontSize: 13,            // font lebih kecil sedikit
+          fontSize: 13,           
           textTransform: 'capitalize',
           color: isDark ? '#f2f2f2' : '#222',
         },
