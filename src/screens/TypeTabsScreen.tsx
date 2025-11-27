@@ -1,4 +1,5 @@
-import { FlatList, View, ActivityIndicator, Text, Pressable } from "react-native";
+import { useState, useMemo } from "react";
+import { FlatList, View, Text, Pressable, TextInput } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import PokemonCard from "../components/PokemonCard";
 import { usePokemonByType } from "../hooks/usePokemonByType";
@@ -12,12 +13,26 @@ export default function TypeTabScreen() {
   const nav = useNavigation<any>();
   const { isDark } = useTheme();
   const { isOnline } = useNetwork();
-
   const { pokemons, loading, error, fetchPokemons } = usePokemonByType(type);
 
   const backgroundColor = isDark ? "#121212" : "#fafafa";
-  const textColor = isDark ? "#eee" : "#222";
 
+  // ==========================
+  // 🔥 SEARCH + MEMO FILTER
+  // ==========================
+  const [searchText, setSearchText] = useState("");
+
+  const filteredPokemons = useMemo(
+    () =>
+      pokemons.filter((p) =>
+        p.name.toLowerCase().includes(searchText.trim().toLowerCase())
+      ),
+    [pokemons, searchText]
+  );
+
+  // ==========================
+  // 🔥 OFFLINE VIEW
+  // ==========================
   if (!isOnline)
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor }}>
@@ -31,6 +46,7 @@ export default function TypeTabScreen() {
       </View>
     );
 
+  // LOADING
   if (loading)
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor }}>
@@ -38,6 +54,7 @@ export default function TypeTabScreen() {
       </View>
     );
 
+  // ERROR
   if (error)
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor }}>
@@ -53,17 +70,33 @@ export default function TypeTabScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor, padding: 14 }}>
+
+      <TextInput
+        placeholder="Cari Pokémon berdasarkan tipe..."
+        placeholderTextColor={isDark ? "#999" : "#666"}
+        value={searchText}
+        onChangeText={setSearchText}
+        style={{
+          backgroundColor: isDark ? "#1f1f1f" : "#e9e9e9",
+          borderRadius: 12,
+          padding: 12,
+          color: isDark ? "#fff" : "#000",
+          fontSize: 16,
+          marginBottom: 14,
+        }}
+      />
+
       <FlatList<PokemonListItem>
-        data={pokemons}
-        showsVerticalScrollIndicator={false}
+        data={filteredPokemons}
         keyExtractor={(i) => i.name}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 80 }}
         renderItem={({ item }) => (
           <PokemonCard
             name={item.name}
             url={item.url}
-            onPress={() => nav.navigate("Detail", { name: item.name })}
             isDark={isDark}
+            onPress={() => nav.navigate("Detail", { name: item.name })}
           />
         )}
       />

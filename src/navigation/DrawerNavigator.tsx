@@ -15,10 +15,19 @@ export default function DrawerNavigator() {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
-        headerStyle: { backgroundColor: isDark ? "#121212" : "#ffffff" },
+        headerStyle: { 
+          backgroundColor: isDark ? "#121212" : "#ffffff",
+          height: 42, // ⬅️ header default ±56 → diperkecil jadi lebih rapat
+        },
+        headerTitleStyle: {
+          fontSize: 14, // ⬅️ Font diperkecil agar proporsional
+          fontWeight: "700",
+        },
         headerTintColor: isDark ? "#f2f2f2" : "#222",
+
         drawerStyle: { backgroundColor: isDark ? "#1a1a1a" : "#fff" },
         drawerLabelStyle: { fontWeight: "600", color: isDark ? "#f2f2f2" : "#222" },
+
         drawerActiveBackgroundColor: isDark ? "#333" : "#e6e6e6",
         drawerActiveTintColor: isDark ? "#ff7f50" : "#ff3d3d",
         drawerInactiveTintColor: isDark ? "#aaa" : "#555",
