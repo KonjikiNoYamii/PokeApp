@@ -1,6 +1,6 @@
 // screens/AllPokemonTab.tsx
-import React, { useState } from "react";
-import { FlatList, ActivityIndicator, View, Text, Pressable, TextInput } from "react-native";
+import { useState, useMemo } from "react";
+import { FlatList, View, Text, Pressable, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { usePokemons } from "../hooks/usePokemons";
 import PokemonCard from "../components/PokemonCard";
@@ -17,8 +17,13 @@ export default function AllPokemonTab() {
 
   const backgroundColor = isDark ? "#121212" : "#fafafa";
 
-  const filteredPokemons = pokemons.filter(p =>
-    p.name.toLowerCase().includes(searchText.toLowerCase())
+  // 🔥 optimized filter — tidak re-render tiap ketik
+  const filteredPokemons = useMemo(
+    () =>
+      pokemons.filter((p) =>
+        p.name.toLowerCase().includes(searchText.trim().toLowerCase())
+      ),
+    [pokemons, searchText]
   );
 
   if (loading)
@@ -48,20 +53,24 @@ export default function AllPokemonTab() {
 
   return (
     <View style={{ flex: 1, backgroundColor, padding: 14 }}>
+
+      {/* 🔥 SEARCH BAR */}
       <TextInput
         placeholder="Cari Pokémon..."
-        placeholderTextColor={isDark ? "#aaa" : "#555"}
+        placeholderTextColor={isDark ? "#999" : "#666"}
         value={searchText}
         onChangeText={setSearchText}
         style={{
-          backgroundColor: isDark ? "#2a2a2a" : "#eee",
+          backgroundColor: isDark ? "#1f1f1f" : "#e9e9e9",
           borderRadius: 12,
-          padding: 10,
-          marginBottom: 12,
+          padding: 12,
           color: isDark ? "#fff" : "#000",
+          fontSize: 16,
+          marginBottom: 14,
         }}
       />
 
+      {/* LIST */}
       <FlatList<PokemonListItem>
         data={filteredPokemons}
         showsVerticalScrollIndicator={false}
@@ -71,8 +80,8 @@ export default function AllPokemonTab() {
           <PokemonCard
             name={item.name}
             url={item.url}
-            onPress={() => nav.navigate("Detail", { name: item.name })}
             isDark={isDark}
+            onPress={() => nav.navigate("Detail", { name: item.name })}
           />
         )}
       />

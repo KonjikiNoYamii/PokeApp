@@ -1,6 +1,4 @@
-// screens/TypeTabScreen.tsx
-import React, { useState } from "react";
-import { FlatList, View, ActivityIndicator, Text, Pressable, TextInput } from "react-native";
+import { FlatList, View, ActivityIndicator, Text, Pressable } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import PokemonCard from "../components/PokemonCard";
 import { usePokemonByType } from "../hooks/usePokemonByType";
@@ -17,13 +15,8 @@ export default function TypeTabScreen() {
 
   const { pokemons, loading, error, fetchPokemons } = usePokemonByType(type);
 
-  const [searchText, setSearchText] = useState("");
-
   const backgroundColor = isDark ? "#121212" : "#fafafa";
-
-  const filteredPokemons = pokemons.filter(p =>
-    p.name.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const textColor = isDark ? "#eee" : "#222";
 
   if (!isOnline)
     return (
@@ -60,22 +53,8 @@ export default function TypeTabScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor, padding: 14 }}>
-      <TextInput
-        placeholder="Cari Pokémon..."
-        placeholderTextColor={isDark ? "#aaa" : "#555"}
-        value={searchText}
-        onChangeText={setSearchText}
-        style={{
-          backgroundColor: isDark ? "#2a2a2a" : "#eee",
-          borderRadius: 12,
-          padding: 10,
-          marginBottom: 12,
-          color: isDark ? "#fff" : "#000",
-        }}
-      />
-
       <FlatList<PokemonListItem>
-        data={filteredPokemons}
+        data={pokemons}
         showsVerticalScrollIndicator={false}
         keyExtractor={(i) => i.name}
         contentContainerStyle={{ paddingBottom: 80 }}

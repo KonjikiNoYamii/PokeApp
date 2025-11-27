@@ -7,6 +7,8 @@ import LoginScreen from '../screens/LoginScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import AboutScreen from '../screens/AboutScreen';
 import { useTheme } from '../context/ThemeContext';
+import OfflineBanner from '../components/OfflineBanner';
+import { useNetwork } from '../hooks/useNetwork';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -19,10 +21,13 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
+  const {isOnline} = useNetwork()
   const { isDark } = useTheme();
 
   return (
     <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+      {!isOnline && <OfflineBanner />}
+
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

@@ -4,6 +4,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import BottomTabsNavigator from "./BottomTabsNavigator";
 import SettingsScreen from "../screens/SettingsScreen";
 import { useTheme } from "../context/ThemeContext";
+import CustomDrawer from "../components/CustomDrawer";
 
 const Drawer = createDrawerNavigator();
 
@@ -12,6 +13,7 @@ export default function DrawerNavigator() {
 
   return (
     <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
         headerStyle: { backgroundColor: isDark ? "#121212" : "#ffffff" },
         headerTintColor: isDark ? "#f2f2f2" : "#222",

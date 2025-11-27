@@ -3,7 +3,7 @@ import apiClient from "./apiClient";
 
 export const PokemonService = {
 
-  getPokemons: async (limit = 50) => {
+  getPokemons: async (limit = 100) => {
     const { data } = await apiClient.get(`/pokemon?limit=${limit}`);
     return data.results;
   },

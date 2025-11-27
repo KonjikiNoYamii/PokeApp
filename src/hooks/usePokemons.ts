@@ -10,11 +10,8 @@ export const usePokemons = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await PokemonService.getPokemons(50);
-
-      // Delay 1.2 detik supaya loading terasa
-      await new Promise((resolve: any) => setTimeout(resolve, 1200));
-
+      const data = await PokemonService.getPokemons(100);
+      await new Promise((resolve: any) => setTimeout(resolve, 3000));
       setPokemons(data);
     } catch (err: any) {
       setError("Gagal memuat Pokémon. Silahkan coba lagi.");

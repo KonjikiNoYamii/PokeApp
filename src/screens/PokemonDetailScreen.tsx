@@ -26,7 +26,6 @@ export default function PokemonDetailScreen() {
       setData(detail);
     })();
 
-    // cleanup sound saat unmount
     return () => {
       if (sound) sound.release();
     };
